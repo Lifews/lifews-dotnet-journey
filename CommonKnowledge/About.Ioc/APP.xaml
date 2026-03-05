@@ -1,0 +1,8 @@
+﻿<Application
+    x:Class="About.Ioc.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:About.Ioc"
+    Startup="Application_Startup">
+    <Application.Resources />
+</Application>

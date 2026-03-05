@@ -1,0 +1,8 @@
+﻿<Application
+    x:Class="Demo.TextBoxValidation.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Demo.TextBoxValidation"
+    StartupUri="View/AnotherWindow.xaml">
+    <Application.Resources />
+</Application>

@@ -1,0 +1,31 @@
+﻿<Window
+    x:Class="About.Ioc.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:About.Ioc"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <DockPanel Margin="5">
+        <StackPanel
+            Margin="0,0,0,5"
+            DockPanel.Dock="Top"
+            Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" Text="Limit: " />
+            <TextBox
+                Name="limit"
+                Width="100"
+                Margin="5,0"
+                Text="{Binding Limit}" />
+            <Button
+                Command="{Binding GetFactsCommand}"
+                CommandParameter="{Binding ElementName=limit, Path=Text}"
+                Content="Get Facts"
+                DockPanel.Dock="Top" />
+        </StackPanel>
+        <ListBox ItemsSource="{Binding CatFacts}" />
+    </DockPanel>
+</Window>

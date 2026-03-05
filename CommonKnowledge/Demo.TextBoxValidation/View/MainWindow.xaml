@@ -1,0 +1,62 @@
+﻿<Window
+    x:Class="Demo.TextBoxValidation.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Demo.TextBoxValidation"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Width" Value="200" />
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+
+    <StackPanel HorizontalAlignment="Left">
+
+        <!--  方法一  -->
+        <!--
+        <TextBlock Text="基础用法" />
+        <TextBox Margin="5" Text="{Binding UserName, ValidatesOnExceptions=True}" />
+        <TextBox Margin="5" Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}" />
+
+
+
+        -->
+        <!--  方法二  -->
+        <!--
+        <TextBlock Margin="0,50,0,0" Text="自定义用法" />
+        <TextBox>
+            <TextBox.Text>
+                <Binding Path="UserName">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule />
+        -->
+        <!--<ExceptionValidationRule />
+                        <local:StringLengthRule MaxLength="10" MinLength="6" />-->
+        <!--
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBox Margin="5" Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}" />-->
+
+
+        <!--  方法三  -->
+        <TextBlock Margin="0,50,0,0" Text="IDataError用法" />
+        <TextBox Margin="5" Text="{Binding UserName, ValidatesOnDataErrors=True}" />
+        <TextBox Margin="5" Text="{Binding Age, ValidatesOnDataErrors=True}" />
+
+    </StackPanel>
+
+</Window>

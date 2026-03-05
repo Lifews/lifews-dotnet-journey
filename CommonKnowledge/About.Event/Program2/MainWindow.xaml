@@ -1,0 +1,82 @@
+﻿<Window
+    x:Class="About.Event.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:About.Event"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+
+    <StackPanel
+        x:Name="MainPanel"
+        Margin="10"
+        Background="LightGray">
+
+        <Border
+            x:Name="OuterBorder"
+            Margin="5"
+            Padding="10"
+            Background="LightBlue"
+            BorderBrush="Blue"
+            BorderThickness="2">
+
+
+            <StackPanel x:Name="MiddlePanel" Background="LightYellow">
+
+
+                <Border
+                    x:Name="InnerBorder"
+                    Padding="10"
+                    Background="LightPink"
+                    BorderBrush="Red"
+                    BorderThickness="2">
+
+                    <!--  自定义控件，会触发路由事件  -->
+                    <local:BubbleControl
+                        x:Name="MyBubbleControl"
+                        Width="200"
+                        Height="40"
+                        Margin="10"
+                        Content="点击我触发路由事件" />
+
+                </Border>
+
+                <!--  普通按钮作为对比  -->
+                <Button
+                    x:Name="NormalButton"
+                    Width="200"
+                    Height="30"
+                    Margin="10"
+                    Click="NormalButton_Click"
+                    Content="普通按钮（对比）" />
+
+            </StackPanel>
+
+        </Border>
+
+        <!--  事件日志显示区域  -->
+        <Border
+            Margin="5"
+            Padding="5"
+            BorderBrush="Black"
+            BorderThickness="1">
+            <ScrollViewer Height="150">
+                <TextBlock
+                    x:Name="EventLog"
+                    Text="事件日志："
+                    TextWrapping="Wrap" />
+            </ScrollViewer>
+        </Border>
+
+        <Button
+            Width="80"
+            HorizontalAlignment="Left"
+            Click="ClearLog_Click"
+            Content="清除日志" />
+
+    </StackPanel>
+
+</Window>

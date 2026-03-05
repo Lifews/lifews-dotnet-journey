@@ -1,0 +1,8 @@
+ctor+tab 构造函数
+
+cw+tab console.writeline()
+
+propdp+tab 依赖属性
+
+propa+tab 附加属性
+

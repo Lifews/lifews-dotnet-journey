@@ -1,0 +1,46 @@
+﻿<Window
+    x:Class="About.Property.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:About.Property"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <Style TargetType="local:CustomTextBox">
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="Yellow" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel>
+
+        <!--  依赖属性  -->
+        <local:CustomTextBox
+            Width="200"
+            Height="30"
+            Margin="10"
+            IsHighlighted="True"
+            Text="Hello, World!" />
+
+
+        <!--  附加属性  -->
+        <local:CustomTextBox local:TextBoxHelper.Title="This is title" Text="{Binding RelativeSource={RelativeSource Self}, Path=(local:TextBoxHelper.Title)}" />
+
+
+        <!--  附加属性示例  -->
+        <TextBox
+            x:Name="tbox"
+            local:TextBoxHelper.MonitorTextChange="True"
+            Text="" />
+        <CheckBox IsChecked="{Binding ElementName=tbox, Path=(local:TextBoxHelper.HasText), Mode=OneWay}" />
+
+    </StackPanel>
+</Window>

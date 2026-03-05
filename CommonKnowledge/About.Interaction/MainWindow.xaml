@@ -1,0 +1,91 @@
+﻿<Window
+    x:Class="AllAboutInteraction.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:AllAboutInteraction"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <StackPanel Margin="5" HorizontalAlignment="Left">
+        <Border
+            Width="100"
+            Height="100"
+            Margin="5"
+            Background="Red">
+            <i:Interaction.Behaviors>
+                <i:MouseDragElementBehavior />
+                <local:BorderBehavior />
+            </i:Interaction.Behaviors>
+        </Border>
+        <TextBox
+            Name="tbox"
+            Width="200"
+            Height="30"
+            Margin="5"
+            Text="{Binding Text}">
+            <i:Interaction.Behaviors>
+                <local:MouseWheelBehavior
+                    MaxValue="100"
+                    MinValue="0"
+                    Scale="10" />
+            </i:Interaction.Behaviors>
+        </TextBox>
+        <Button
+            Width="80"
+            Height="30"
+            Margin="5"
+            Content="clear">
+            <i:Interaction.Behaviors>
+                <local:ClearTextBehavior Target="{Binding ElementName=tbox}" />
+                <!--
+                    如果写 ElementName=tbox, Path=Text 则不起作用。
+                    ElementName=tbox 返回的是一个 TextBox 实例，而
+                    ElementName=tbox, Path=Text 返回的是一个 string 实例（当前文本值）。
+                    你的 TargetProperty 注册时声明的类型是 typeof(TextBox)，
+                    WPF 在把绑定表达式送进来的值赋给依赖属性时，会做一次 隐式类型检查。
+                    当绑定的结果不是 TextBox（这里是 string）时，赋值失败，
+                    依赖属性保持原来的默认值（null），于是 Target?.Clear() 什么也清不掉，看起来就像“不起作用”。
+                -->
+            </i:Interaction.Behaviors>
+        </Button>
+        <Button
+            Width="80"
+            Height="30"
+            Margin="5"
+            Content="close">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <i:CallMethodAction MethodName="Close" TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+        <Button
+            Width="80"
+            Height="30"
+            Margin="5"
+            Content="shut down">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <i:CallMethodAction MethodName="Shutdown" TargetObject="{Binding Source={x:Static Application.Current}}" />
+                </i:EventTrigger>
+                <i:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsMouseOver}" Value="True">
+                    <i:ChangePropertyAction
+                        PropertyName="Background"
+                        TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Button}}"
+                        Value="Red" />
+                </i:DataTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+    </StackPanel>
+</Window>

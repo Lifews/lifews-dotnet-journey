@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=bdm-ci;Uid=root;Pwd=root123;"
+  }
+}
