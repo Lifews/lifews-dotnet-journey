@@ -187,3 +187,87 @@ REST 并非一项技术标准，而是一套架构约束和原则。它的核心
 
 
 
+
+
+
+
+# ASP.NET Core + Vue 解决跨域请求
+
+在典型的 ASP.NETCore + Vue 开发模式下：
+
+- **Vue 前端**通常运行在开发服务器上，比如 `http://localhost:8080`
+- **ASP.NETCore 后端**可能运行在 `http://localhost:5000` 或 `https://localhost:5001`
+
+这两个服务运行在不同的端口上，因此它们属于**不同源**。当前端代码通过 Ajax/Fetch 向后端 API 发送请求时，浏览器会因同源策略而阻止该请求，控制台会报错：
+
+```text
+Access to fetch at 'http://localhost:5000/api/values' from origin 'http://localhost:8080' has been blocked by CORS policy...
+```
+
+可以通过以下方法解决这个问题
+
+
+
+| 特性                     | Vue 代理                         | 后端 CORS                        |
+| :----------------------- | :------------------------------- | :------------------------------- |
+| **生效环境**             | 仅开发环境                       | 开发 + 生产环境                  |
+| **是否需要修改前端代码** | 否（使用相对路径）               | 是（必须使用后端绝对地址）       |
+| **是否需要修改后端**     | 否                               | 是（配置 CORS 策略）             |
+| **处理证书问题**         | 通过 `secure: false` 轻松解决    | 需手动信任证书或使用 HTTP        |
+| **对浏览器透明**         | 浏览器认为是同源请求，无跨域概念 | 浏览器明确知道是跨域请求         |
+| **适用场景**             | 本地开发联调                     | 生产环境多域名部署               |
+| **配置复杂度**           | 简单                             | 中等（需注意预检请求和来源格式） |
+
+
+
+### 开发时使用 Vue 代理（Proxy）
+
+```js
+module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      }
+    }
+  }
+}
+// 这样，Vue 中请求 /api/values 会被代理到 http://localhost:5000/api/values，浏览器角度看请求是同源的。
+```
+
+
+
+### 生产时在 ASP.NET Core 中配置 CORS 服务
+
+**CORS** 全称是 **跨域资源共享**（Cross-Origin Resource Sharing），它是一种基于 HTTP 头的机制，允许服务器声明哪些源站（域、协议、端口）可以访问其资源。
+
+```C#
+var builder = WebApplication.CreateBuilder(args);
+
+// 添加 CORS 服务
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowVueDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:8080") // 允许 Vue 开发服务器的源
+              .AllowAnyHeader()                     // 允许所有请求头
+              .AllowAnyMethod();                     // 允许所有 HTTP 方法 (GET, POST, PUT...)
+    });
+});
+
+// 其他服务配置...
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+// 启用 CORS 中间件（注意顺序：应在 UseAuthorization 之前）
+app.UseCors("AllowVueDev");
+
+app.UseAuthorization();
+app.MapControllers();
+app.Run();
+```
+
+
+
